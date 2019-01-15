@@ -24,18 +24,25 @@ var questions = [
         answers: ["right", "B", "O", "AB"],
         rightAnswer: "right",
     },
+    {
+        question: "How many units of blood are needed in the US on a daily basis?",
+        answers: ["100,000", "36,000", "63,000", "1,800"],
+        rightAnswer: "36,000",
+    },
 
 ];
+var answerDriver;
+var randomNum;
+var timer = 5;
+var numRight = 0;
+var gameGo;
 $(document).ready(function () {
 
-    var answerDriver;
-    var randomNum;
-    var timer = 5;
 
 
     getRandomNum();
     writeQandA();
-    gameClock();
+    // gameClock();
 
     function getRandomNum() {
         // Pick a random number
@@ -44,13 +51,27 @@ $(document).ready(function () {
     };
 
     function newQuestion() {
-        $("btn").remove();
-        getRandomNum();
-
-        writeQandA();
+        if (questions.length > 0) {
+            $("btn").remove();
+            getRandomNum();
+            $("#right").text(numRight);
+            writeQandA();
+            timer = 5;
+        }
+        else {
+            $("#qSpace").remove();
+            console.log("done");
+            clearInterval(gameGo);
+            // $("#qSpace").html(
+            //     "<h1 class = 'jumbotron jumbotron-fluid justify-content-center'>Game Over</h1>"+
+            //     "<h3>'Let's see how you did'</h3>"+
+            //     "<h4>'You got ' + numRight + 'right!'</h4>"
+            // );
+        }
     }
 
     function writeQandA() {
+        $("#right").text(numRight);
         // Pull question
         var workingQuestion = questions[randomNum].question;
         // Mark question to DOM
@@ -69,51 +90,44 @@ $(document).ready(function () {
             // Put the button with the stuff on the page
             $(".answerRow").append(answerButton);
         });
-
-
     };
-    console.log("Q: " + questions[randomNum])
+
     // Clicks won't log still, attribute undefined due to randomNum
     $(document).on("click", ".btn", function () {
         var myGuess = ($(this).attr("answerClick"));
-        if (myGuess == questions[randomNum].rightAnswer) {
+        if (myGuess == questions[randomNum].rightAnswer && questions.length > 0) {
             // correct++;
             $("#question").empty();
-            questions[randomNum].splice(randomNum, 1);
+            questions.splice(randomNum, 1);
             newQuestion();
+            numRight++;
         }
-        else {
+        else if (myGuess != questions[randomNum].rightAnswer && questions.length > 0) {
             // wrong ++;
             $("#question").empty();
-            questions[randomNum].splice(randomNum, 1);
+            questions.splice(randomNum, 1);
             newQuestion();
+        }
+
+        else {
+            console.log("done)");
         }
     });
 
 
     function gameClock() {
-        // var timer = 10
-        setInterval(function () {
+        timer = 5
+        setInterval(gameGo, 1000);
+        function gameGo() {
+            if (timer === 0) {
+                newQuestion();
+            }
+            if (timer > 0) {
+                timer--;
+            }
             $("#timer").text(timer + " Seconds");
-            timer--;
-        }, 1000);
-        if (timer == 0) {
-            // clearInterval(gameClock);
-            newQuestion();
-        }
+        };
     };
-
-
-
-    // $(document).on("click", ".btn", function () {
-    //     console.log(order[i]);
-
-
-
-
-
-
-
 
 
 

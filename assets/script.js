@@ -28,6 +28,7 @@ $(document).ready(function () {
 
     test();
     getQuestion();
+    getAnswers();
     // gameClock();
 
     function test() {
@@ -35,17 +36,14 @@ $(document).ready(function () {
         // console.log("Chosen Question: " + questionArray[randomNum]);
         // console.log("Possible answers: " + answerArray[randomNum]);
         console.log("Correct Answer: " + rightAnswer[randomNum]);
-        // console.table(questionArray);
-        // console.table(answerArray);
-        // console.table(rightAnswer);
+        
     }
 
-
     function getQuestion() {
-        
         $("#question").text(workingQuestion);
+    };
     
-        $(".answerRow").empty();
+    function getAnswers() {
         answerArray[randomNum].forEach(function (element) {
             var answerButton = $("<btn>");
             answerButton.addClass("btn btn-primary btn-block")
@@ -55,33 +53,22 @@ $(document).ready(function () {
         });
     };
     
-    function pullQA() {
-        questionArray.splice(randomNum, 1);
-        answerArray.splice(randomNum, 1);
-        rightAnswer.splice(randomNum, 1);
-        // test();
-        var randomNum = Math.floor(Math.random() * questionArray.length);
-        console.log("New randomNum: " + randomNum);
-
-
-
-        getQuestion();
-        // getAnswers();
-    };
+    function next() {
+        
+    }
     
     $(document).on("click", ".btn", function () {
         var myGuess = ($(this).attr("answerClick"));
         if (myGuess == rightAnswer[randomNum]) {
+            // console.log("awesomeSauce");
             correct++;
-            pullQA();
-            // test();
-            $("#question").empty();
+            questionArray.splice(randomNum, 1);
             
         }
         else {
+            // console.log("shame");
             wrong ++;
-            pullQA ();
-            $("#question").empty();
+            questionArray.splice([randomNum], 1);
             
             
         }
